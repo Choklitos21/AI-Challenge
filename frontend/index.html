@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Embedding Lab</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    body { font-family: 'IBM Plex Sans', sans-serif; }
+    .mono { font-family: 'IBM Plex Mono', monospace; }
+    .fade-in { animation: fadeIn 0.2s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body class="bg-zinc-950 text-zinc-100 min-h-screen">
+
+  <!-- AUTH VIEW -->
+  <div id="view-auth" class="min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-sm fade-in">
+      <div class="mb-8">
+        <p class="mono text-xs text-zinc-500 mb-1">v1.0.0</p>
+        <h1 class="text-2xl font-medium tracking-tight">Embedding Lab</h1>
+        <p class="text-zinc-400 text-sm mt-1">Compare embeddings across AI models</p>
+      </div>
+
+      <div class="flex gap-2 mb-6">
+        <button onclick="showTab('login')" id="tab-login"
+          class="tab-btn mono text-xs px-3 py-1.5 border border-zinc-700 rounded text-zinc-300 bg-zinc-800">
+          login
+        </button>
+        <button onclick="showTab('register')" id="tab-register"
+          class="tab-btn mono text-xs px-3 py-1.5 border border-transparent rounded text-zinc-500">
+          register
+        </button>
+      </div>
+
+      <div id="auth-error" class="hidden mb-4 text-xs text-red-400 mono bg-red-950/30 border border-red-900 rounded px-3 py-2"></div>
+
+      <div class="flex flex-col gap-3">
+        <input id="auth-email" type="email" placeholder="email"
+          class="mono text-sm bg-zinc-900 border border-zinc-800 rounded px-3 py-2.5 text-zinc-100 placeholder-zinc-600 focus:outline-none focus:border-zinc-600 w-full" />
+        <input id="auth-password" type="password" placeholder="password"
+          class="mono text-sm bg-zinc-900 border border-zinc-800 rounded px-3 py-2.5 text-zinc-100 placeholder-zinc-600 focus:outline-none focus:border-zinc-600 w-full" />
+        <button onclick="handleAuth()"
+          class="mono text-xs bg-zinc-100 text-zinc-900 rounded px-4 py-2.5 font-medium hover:bg-white transition-colors">
+          continue →
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- APP VIEW -->
+  <div id="view-app" class="hidden min-h-screen">
+
+    <!-- Navbar -->
+    <nav class="border-b border-zinc-800 px-6 py-3 flex items-center justify-between">
+      <span class="mono text-sm text-zinc-300">embedding<span class="text-zinc-600">.</span>lab</span>
+      <div class="flex items-center gap-4">
+        <button onclick="showView('embed')" id="nav-embed"
+          class="nav-btn mono text-xs text-zinc-400 hover:text-zinc-100 transition-colors">
+          embed
+        </button>
+        <button onclick="showView('history')" id="nav-history"
+          class="nav-btn mono text-xs text-zinc-400 hover:text-zinc-100 transition-colors">
+          history
+        </button>
+        <button onclick="handleLogout()"
+          class="mono text-xs text-zinc-600 hover:text-zinc-400 transition-colors">
+          logout
+        </button>
+      </div>
+    </nav>
+
+    <!-- EMBED VIEW -->
+    <div id="view-embed" class="max-w-2xl mx-auto px-6 py-12 fade-in">
+      <div class="mb-8">
+        <h2 class="text-lg font-medium">New embedding</h2>
+        <p class="text-zinc-500 text-sm mt-1">Text will be embedded using OpenAI and Google models simultaneously</p>
+      </div>
+
+      <div class="flex flex-col gap-3">
+        <textarea id="embed-input" rows="5" placeholder="Enter text to embed..."
+          class="mono text-sm bg-zinc-900 border border-zinc-800 rounded px-4 py-3 text-zinc-100 placeholder-zinc-600 focus:outline-none focus:border-zinc-600 resize-none w-full leading-relaxed">
+        </textarea>
+
+        <div class="flex items-center justify-between">
+          <div class="flex gap-4">
+            <span class="mono text-xs text-zinc-600">openai <span class="text-zinc-500">text-embedding-3-small</span></span>
+            <span class="mono text-xs text-zinc-600">google <span class="text-zinc-500">text-embedding-004</span></span>
+          </div>
+          <button onclick="handleEmbed()" id="embed-btn"
+            class="mono text-xs bg-zinc-100 text-zinc-900 rounded px-4 py-2 font-medium hover:bg-white transition-colors disabled:opacity-40">
+            run →
+          </button>
+        </div>
+      </div>
+
+      <div id="embed-error" class="hidden mt-4 text-xs text-red-400 mono bg-red-950/30 border border-red-900 rounded px-3 py-2"></div>
+
+      <!-- Results -->
+      <div id="embed-results" class="hidden mt-8 fade-in">
+        <p class="mono text-xs text-zinc-500 mb-4">results</p>
+        <div id="results-grid" class="flex flex-col gap-3"></div>
+      </div>
+    </div>
+
+    <!-- HISTORY VIEW -->
+    <div id="view-history" class="hidden max-w-2xl mx-auto px-6 py-12 fade-in">
+      <div class="mb-8">
+        <h2 class="text-lg font-medium">History</h2>
+        <p class="text-zinc-500 text-sm mt-1">Previously embedded texts</p>
+      </div>
+      <div id="history-list" class="flex flex-col gap-3"></div>
+    </div>
+
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
